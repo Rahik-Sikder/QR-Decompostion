@@ -1,21 +1,13 @@
 from gram_schmidt import gram_schmidt
+from matrix import Matrix
+from matrix import Vector
 
 def main():
-    A = [[1,1,1], 
-         [1,1,1], 
-         [1,1,0],
-         [1,0,0]]
-    for row in A: 
-        print(row)
     
-    Q, R, ep = gram_schmidt(A)
+    A = Matrix([Vector([1, 1, 1, 1]), Vector([0, 1, 1, 1]), Vector([0, 0, 1, 1])])
 
-    print("Q")
-    for row in Q: 
-        print(row)
-    print("R")
-    for row in R: 
-        print(row)
+    gram_schmidt(A)
+
     
 
 if __name__ == '__main__':

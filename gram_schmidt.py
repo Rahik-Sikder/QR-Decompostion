@@ -1,13 +1,58 @@
-from matrix import *
+from matrix import Matrix
+from matrix import Vector
 
-def gram_schmidt(A):
-    # get first column
+
+def gram_schmidt(basis_matrix):
+
+    # Create list of orthonormal colums
+    ON_cols = []
+
+    basis_matrix.print_matrix()
+
+    print("This is the type Vector ", isinstance(basis_matrix.get(0), Vector))
+
     
-    # create list of arrays to store the orthonormal vectors of Q
-    orthonormal_vectors = []
-    
+    for i in range(0, basis_matrix.num_cols):
+        
+        # Get column vector of the arbitrary basis matrix
+        original_col = basis_matrix.get(i)
+        ortho_col = basis_matrix.get(i)
+
+        # Subtract project of col onto all q from ON from col
+        for q in ON_cols:
+            temp_q = Vector(q.vector)
+            
+            ortho_col.subtract(temp_q.scalar_multiply(temp_q.dot_product(original_col)))
+            print("Modifying col ", i+1, " which is")
+            ortho_col.print_vector()
      
-    A.get(0)
+        # Normalize orthogonal column 
+        ortho_col.normalize_vector()
+
+        # append to the list
+        ON_cols.append(ortho_col)
+
+        
+
+        print("Length of ON: ", len(ON_cols))
+        for q in ON_cols:
+            q.print_vector()
+        print()
+
+    print("This is ON_Cols")
+
+    for q in ON_cols:
+        q.print_vector()
+    
+    print("This is Q")
+    Q = Matrix(ON_cols)
+    Q.print_matrix()
+
+            
+
+
+     
+   
 
 
 
