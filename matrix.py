@@ -22,6 +22,7 @@ class Matrix:
             for col in range(self.num_cols): 
                 print("\t", self.matrix[col].get(row), end='')
             print("|", end='\n')
+
             
 
 
@@ -50,16 +51,15 @@ class Vector:
     
     def normalize_vector(self):
         vector_length = self.calc_vector_length()
-        print("Normalizing vector, here is length: ", vector_length)
         for i in range(self.length):
             self.vector[i] = self.get(i) / vector_length
         return self
         
     def calc_vector_length(self):
-        print("self dot product is ", self.dot_product(self))
         return math.sqrt(self.dot_product(self))
 
     def subtract(self, other_vec):
+        # Subtraction modifies object
         for i in range(self.length):
             self.vector[i] = self.get(i) - other_vec.get(i)
         
@@ -67,3 +67,33 @@ class Vector:
         for i in range(self.length):
             self.vector[i] *= scalar
         return self
+    
+    def __sub__(self, other):
+        # Subtraction creates new object
+        res = Vector(self.vector)
+        for i in range(res.length):
+            res.vector[i] = res.get(i) - other.get(i)
+        return res
+    
+    def __add__(self, other):
+        # Addition creates new object
+        res = Vector(self.vector)
+        for i in range(res.length):
+            res.vector[i] = res.get(i) + other.get(i)
+        return res
+        
+
+# Matrix operations that return a new object
+
+def scalar_multiply(scalar, vector):
+    # Scalar multiply creates new object
+        res = Vector(vector.vector)
+        for i in range(res.length):
+            res.vector[i] *= scalar
+        return res
+
+def dot_product(vector_a, vector_b):
+    dot_product = 0
+    for i in range(vector_a.length):
+        dot_product += vector_a.get(i) * vector_b.get(i)
+    return dot_product
