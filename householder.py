@@ -1,2 +1,6 @@
 def householder(A):
+    '''
+    
+    
+    '''
     pass
