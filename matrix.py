@@ -19,14 +19,20 @@ class Matrix:
         for row in range(self.num_rows):
             print("|", end='')
             for col in range(self.num_cols): 
-                print("\t", self.matrix[col].get(row), end='')
-            print("|", end='\n')
+                print("" if col == 0 else "\t\t", '%.5f'%(self.matrix[col].get(row)), end='')
+            print(" |", end='\n\n')
     
     def scalar_multiply(self, scalar):
         for vector in self.matrix:
             vector.scalar_multiply(scalar)
         return self
-
+    
+    def __sub__(self, other):
+        # Subtraction creates new object
+        vector_list = []
+        for i in range(self.num_cols):
+            vector_list.append(self.matrix[i] - other.matrix[i])
+        return Matrix(vector_list)
             
 
 
@@ -112,7 +118,12 @@ def get_identity(n):
     return Matrix(vectors)
   
 def vector_multiply(vector_a, vector_b):
-    if (vector_a.isTranspose and not vector_b.isTranspose) or (not vector_a.isTranspose and vector_b.isTranspose):
+    if (not vector_a.isTranspose or  vector_b.isTranspose) and ( vector_a.isTranspose or not vector_b.isTranspose):
+        vector_a.print_vector()
+        vector_b.print_vector()
+        print(vector_a.isTranspose)
+        print(vector_b.isTranspose)
+
         raise Exception("Matrix Multiply Error")
 
     if(vector_a.isTranspose): return dot_product(vector_a, vector_b)
