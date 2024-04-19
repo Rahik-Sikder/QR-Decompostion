@@ -1,7 +1,6 @@
 from gram_schmidt import gram_schmidt
 from gram_schmidt import gram_schmidt_modified
-from matrix import Matrix
-from matrix import Vector
+from matrix import *
 
 def main():
     

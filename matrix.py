@@ -50,12 +50,12 @@ class Vector:
         return dot_product
     
     def normalize_vector(self):
-        vector_length = self.calc_vector_length()
+        vector_length = self.vector_length()
         for i in range(self.length):
             self.vector[i] = self.get(i) / vector_length
         return self
         
-    def calc_vector_length(self):
+    def vector_length(self):
         return math.sqrt(self.dot_product(self))
 
     def subtract(self, other_vec):
@@ -97,3 +97,12 @@ def dot_product(vector_a, vector_b):
     for i in range(vector_a.length):
         dot_product += vector_a.get(i) * vector_b.get(i)
     return dot_product
+
+
+def get_identity(n):
+    vectors = []
+    for i in range(n):
+        list = [0] * n
+        list[i] = 1
+        vectors.append(Vector(list))
+    return Matrix(vectors)
