@@ -22,6 +22,11 @@ class Matrix:
             for col in range(self.num_cols): 
                 print("\t", self.matrix[col].get(row), end='')
             print("|", end='\n')
+    
+    def scalar_multiply(self, scalar):
+        for vector in self.matrix:
+            vector.scalar_multiply(scalar)
+        return self
 
             
 
