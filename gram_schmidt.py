@@ -1,5 +1,4 @@
 from matrix import *
-from matrix import Vector
 
 
 def gram_schmidt(basis_matrix):
