@@ -28,4 +28,3 @@ def householder(A: Matrix):
 
         # Reflect
         Rw = I - vector_multiply(w, wT).scalar_multiply(2 / dot_product(w, wT))
-
