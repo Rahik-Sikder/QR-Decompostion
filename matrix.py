@@ -1,5 +1,4 @@
 import math
-
 class Matrix:
 
     def __init__(self, vector_list):
@@ -28,9 +27,10 @@ class Matrix:
 
 class Vector:
 
-    def __init__(self, nums):
+    def __init__(self, nums, isTranspose=False):
         self.vector = []
         self.length = len(nums)
+        self.isTranspose = isTranspose
         for x in nums:
             self.vector.append(x)
     
@@ -50,12 +50,12 @@ class Vector:
         return dot_product
     
     def normalize_vector(self):
-        vector_length = self.vector_length()
+        vector_length = self.calc_vector_length()
         for i in range(self.length):
             self.vector[i] = self.get(i) / vector_length
         return self
         
-    def vector_length(self):
+    def calc_vector_length(self):
         return math.sqrt(self.dot_product(self))
 
     def subtract(self, other_vec):
@@ -98,11 +98,19 @@ def dot_product(vector_a, vector_b):
         dot_product += vector_a.get(i) * vector_b.get(i)
     return dot_product
 
+def vector_multiply(vector_a, vector_b):
+    if (vector_a.isTranspose and not vector_b.isTranspose) or (not vector_a.isTranspose and vector_b.isTranspose):
+        raise Exception("Matrix Multiply Error")
 
-def get_identity(n):
-    vectors = []
-    for i in range(n):
-        list = [0] * n
-        list[i] = 1
-        vectors.append(Vector(list))
-    return Matrix(vectors)
+    if(vector_a.isTranspose): return dot_product(vector_a, vector_b)
+    
+    vector_list = []
+    #vvT
+    for val_b in vector_b.vector:
+        nums = []
+        for val_a in vector_a.vector:
+            nums.append(val_a * val_b)
+        vector_list.append(Vector(nums))
+    
+    return Matrix(vector_list)
+
