@@ -3,7 +3,7 @@ from matrix import *
 
 def householder(A: Matrix):
     '''
-    Explaination: uhhh
+    Explaination: 
 
     '''
 
@@ -17,21 +17,21 @@ def householder(A: Matrix):
     # Run through each column of A
     for i in range(0, A.num_cols):
 
-        col_vector = A.get(i)
-        e = I.get(i)
-
-        # Find a matrix w to reflect our col_vectro across
+        # Find a matrix w to reflect our col_vector across
         # Use the length * std basis vector to find w
 
-        w = col_vector - scalar_multiply(col_vector.vector_length(), e)
-        wT = (col_vector - scalar_multiply(col_vector.vector_length(), e))
-        wT.isTranspose = True
+        w = Vector(A.matrix[i].vector[i:])
+        w.vector[0] -= w.vector_length() 
+        wT = w.get_transpose()
+        constant_term = 2 / dot_product(w, wT)
 
-        # Reflect
-        Rw = I - vector_multiply(w, wT).scalar_multiply(2 / dot_product(w, wT))
-        H.append(Rw)
+        # Instead of finding Rw and computing (Rw)(A), we'll apply wT and w to A individually
+        for col in range(i, A.num_cols):
+            cur_col_A = Vector(A.matrix[col].vector[i:])
+            for row in range(i, A.num_rows):
+                cur_row_Rw = scalar_multiply(w.get(row - i), w)
+                A.matrix[col].vector[row] -= constant_term * dot_product(cur_col_A, cur_row_Rw)
 
-        print("This is R for ", i)
-        Rw.print_matrix()
+        print(f'This is RA for reflection {i}\n')
+        A.print_matrix()
         print()
-        print("This is A")

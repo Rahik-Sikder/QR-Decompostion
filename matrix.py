@@ -15,6 +15,9 @@ class Matrix:
         # Return a new Vector object
         return Vector(self.matrix[i].vector)
     
+    def get_row(self, i):
+        return Vector([ self.matrix[col].vector[i] for col in range(self.num_cols) ])
+    
     def print_matrix(self):
         for row in range(self.num_rows):
             print("|", end='')
@@ -38,10 +41,10 @@ class Matrix:
 
 class Vector:
 
-    def __init__(self, nums, isTranspose=False):
+    def __init__(self, nums, is_transpose=False):
         self.vector = []
         self.length = len(nums)
-        self.isTranspose = isTranspose
+        self.is_transpose = is_transpose
         for x in nums:
             self.vector.append(x)
     
@@ -68,6 +71,11 @@ class Vector:
         
     def vector_length(self):
         return math.sqrt(self.dot_product(self))
+    
+    def get_transpose(self):
+        transpose = Vector(self.vector)
+        transpose.is_transpose = True
+        return transpose
 
     def subtract(self, other_vec):
         # Subtraction modifies object
@@ -79,6 +87,26 @@ class Vector:
             self.vector[i] *= scalar
         return self
     
+    def vector_multiply(self, vector_b):
+        if (not self.is_transpose or  vector_b.is_transpose) and ( self.is_transpose or not vector_b.is_transpose):
+            self.print_vector()
+            vector_b.print_vector()
+            print(self.is_transpose)
+            print(vector_b.is_transpose)
+            raise Exception("Matrix Multiply Error")
+
+        if(self.is_transpose): return dot_product(self, vector_b)
+        
+        vector_list = []
+        #vvT
+        for val_b in vector_b.vector:
+            nums = []
+            for val_a in self.vector:
+                nums.append(val_a * val_b)
+            vector_list.append(Vector(nums))
+        
+        return Matrix(vector_list)
+
     def __sub__(self, other):
         # Subtraction creates new object
         res = Vector(self.vector)
@@ -118,15 +146,15 @@ def get_identity(n):
     return Matrix(vectors)
   
 def vector_multiply(vector_a, vector_b):
-    if (not vector_a.isTranspose or  vector_b.isTranspose) and ( vector_a.isTranspose or not vector_b.isTranspose):
+    if (not vector_a.is_transpose or  vector_b.is_transpose) and ( vector_a.is_transpose or not vector_b.is_transpose):
         vector_a.print_vector()
         vector_b.print_vector()
-        print(vector_a.isTranspose)
-        print(vector_b.isTranspose)
+        print(vector_a.is_transpose)
+        print(vector_b.is_transpose)
 
         raise Exception("Matrix Multiply Error")
 
-    if(vector_a.isTranspose): return dot_product(vector_a, vector_b)
+    if(vector_a.is_transpose): return dot_product(vector_a, vector_b)
     
     vector_list = []
     #vvT
