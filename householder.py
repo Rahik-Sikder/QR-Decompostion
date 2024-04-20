@@ -17,20 +17,22 @@ def householder(A: Matrix):
     # Run through each column of A
     for i in range(0, A.num_cols):
 
-        # Find a matrix w to reflect our col_vector across
-        # Use the length * std basis vector to find w
-
-        w = Vector(A.matrix[i].vector[i:])
+        # Find a matrix w to reflect our col_vector across 
+        # Don't need the column and rows that have alr been computed
+        w = Vector(A.matrix[i].vector[i:]) 
         w.vector[0] -= w.vector_length() 
         wT = w.get_transpose()
         constant_term = 2 / dot_product(w, wT)
 
         # Instead of finding Rw and computing (Rw)(A), we'll apply wT and w to A individually
         for col in range(i, A.num_cols):
+            # Grab the cur col, without the rows that have alr been computed
             cur_col_A = Vector(A.matrix[col].vector[i:])
+            # This saves O(n) computation as the only difference between each row in the new vector
+            # scalar, allowing us to "pre-process" the dot product
+            unscaled_dot_prod = dot_product(cur_col_A, w)
             for row in range(i, A.num_rows):
-                cur_row_Rw = scalar_multiply(w.get(row - i), w)
-                A.matrix[col].vector[row] -= constant_term * dot_product(cur_col_A, cur_row_Rw)
+                A.matrix[col].vector[row] -= constant_term * w.get(row - i) * unscaled_dot_prod
 
         print(f'This is RA for reflection {i}\n')
         A.print_matrix()
