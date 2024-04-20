@@ -1,7 +1,7 @@
 from matrix import *
 
 
-def householder(A: Matrix):
+def householder(input_A: Matrix):
     '''
     Explaination: 
     
@@ -29,12 +29,10 @@ def householder(A: Matrix):
     that I will become QT, which can be turned into Q.
 
     '''
+    A = Matrix(input_A.matrix)
 
-    # Initialize two Identity matries. The second will become QT
+    # Initialize an Identity matrix B to become QT
     B: Matrix = get_identity(A.num_rows)
-
-    # Collection of matricies Rwi, where H = (Rw1)(...)(Rwn)
-    H = []
 
     # Run through each column of A
     for i in range(0, A.num_cols):
@@ -43,19 +41,45 @@ def householder(A: Matrix):
         # Don't need the column and rows that have alr been computed
         w = Vector(A.matrix[i].vector[i:]) 
         w.vector[0] -= w.vector_length() 
-        wT = w.get_transpose()
-        constant_term = 2 / dot_product(w, wT)
+        constant_term = 2 / dot_product(w, w) # No need for explicitly defining a transpose
 
         # Instead of finding Rw and computing (Rw)(A), we'll apply wT and w to A individually
-        for col in range(i, A.num_cols):
+        for col in range(0, A.num_cols):
             # Grab the cur col, without the rows that have alr been computed
             cur_col_A = Vector(A.matrix[col].vector[i:])
+            cur_col_B = Vector(B.matrix[col].vector[i:])
+
             # This saves O(n) computation as the only difference between each row in the new vector
             # scalar, allowing us to "pre-process" the dot product
             unscaled_dot_prod = dot_product(cur_col_A, w)
-            for row in range(i, A.num_rows):
-                A.matrix[col].vector[row] -= constant_term * w.get(row - i) * unscaled_dot_prod
+            unscaled_dot_prod_B = dot_product(cur_col_B, w)
 
-        print(f'This is RA for reflection {i}\n')
-        A.print_matrix()
-        print()
+            for row in range(i, A.num_rows):
+                # print("adjusting row ", row, " and column ", col)
+                A.matrix[col].vector[row] -= constant_term * w.get(row - i) * unscaled_dot_prod
+                B.matrix[col].vector[row] -= constant_term * w.get(row - i) * unscaled_dot_prod_B
+
+        # Account for possibility that B has more cols than A
+        for col in range(A.num_cols, B.num_cols):
+
+            cur_col_B = Vector(B.matrix[col].vector[i:])
+            unscaled_dot_prod_B = dot_product(cur_col_B, w)
+
+            for row in range(i, B.num_rows):
+                # print("adjusting row ", row, " and column ", col)
+                B.matrix[col].vector[row] -= constant_term * w.get(row - i) * unscaled_dot_prod_B
+
+        # For Debugging purposes
+        # print(f'This is RA for reflection {i}\n')
+        # A.print_matrix()
+        # print()
+
+        # print(f'This is B currently for reflection {i}\n')
+        # B.print_matrix()
+        # print()
+
+    # Q = BT 
+    # Also here Q is just given the reference to B after B modifies itself with transpose()
+    Q = B.tranpose()
+
+    return Q, A

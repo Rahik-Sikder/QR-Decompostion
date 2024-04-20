@@ -10,7 +10,14 @@ def main():
     # print()
     # gram_schmidt_modified(A)
 
-    householder(A)
+    Q, R = householder(A)
+    print(f'This is R\n')
+    R.print_matrix()
+    print()
+
+    print(f'This is Q\n')
+    Q.print_matrix()
+    print()
 
 
     
