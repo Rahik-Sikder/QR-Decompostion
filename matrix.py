@@ -82,6 +82,7 @@ class Matrix:
             for col in range(self.num_cols): 
                 print("" if col == 0 else "\t\t", '%.5f'%(self.matrix[col].get(row)), end='')
             print(" |", end='\n\n')
+        print()
     
     def scalar_multiply(self, scalar):
         for vector in self.matrix:
