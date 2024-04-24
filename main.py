@@ -5,11 +5,11 @@ from experiments import *
 
 def main():
     # sample_run()
-    average_error_rand(200, 10)
+    # average_error_rand(200, 10)
     # q8_e_perp()
     # average_error_rand(200, 10)
     q8_e_perp()
-    q8_e_s()
+    # q8_e_s()
     
 
 
