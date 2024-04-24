@@ -6,8 +6,7 @@ from experiments import *
 def main():
     # sample_run()
     average_error_rand(200, 10)
-    
-
+    # q8_e_perp()
 
 def sample_run():
     A = Matrix([Vector([1, 1, 1, 1]), Vector([0, 1, 1, 1]), Vector([0, 0, 1, 1])])

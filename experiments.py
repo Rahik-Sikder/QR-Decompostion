@@ -6,7 +6,6 @@ from gram_schmidt import gram_schmidt, gram_schmidt_modified
 from householder import householder
 from rand_matrix import *
 from matrix import Matrix, Vector
-
 import matplotlib.pyplot as plt
 
 
@@ -23,7 +22,6 @@ def average_error_rand(n, num_times):
         gs_sum += gram_schmidt(rand_matrix)[2]
         modified_gs_sum += gram_schmidt_modified(rand_matrix)[2]
         householder_qr_sum += householder(rand_matrix)[2]
-        print("*", end="")
     
     print("Average for Gram Schmidt from Part 1: ", gs_sum/num_times)
     print("Average for Modified Gram Schmidt from Part 2: ", modified_gs_sum/num_times)
@@ -93,9 +91,9 @@ def q8_e_perp():
     y3 = [] # householder
     for i in range (2, 101):
         RH = regularized_hilbert_matrix(i)
-        y1.append(gram_schmidt(HR)[2])
-        y3.append(gram_schmidt_modified(H)[2])
-        y2.append(householder(H)[2])
+        y1.append(gram_schmidt(RH)[3])
+        y3.append(gram_schmidt_modified(RH)[3])
+        y2.append(householder(RH)[3])
     
     plt.plot(x, y1, label="Gram Schmidt")
     plt.plot(x, y2, label="Modified Gram Schmidt")
@@ -110,9 +108,9 @@ def q8_e_s():
     y3 = [] # householder
     for i in range (2, 101):
         RH = regularized_hilbert_matrix(i)
-        y1.append(gram_schmidt(HR)[3])
-        y3.append(gram_schmidt_modified(H)[3])
-        y2.append(householder(H)[3])
+        y1.append(gram_schmidt(RH)[3])
+        y3.append(gram_schmidt_modified(RH)[3])
+        y2.append(householder(RH)[3])
     plt.plot(x, y1, label="Gram Schmidt")
     plt.plot(x, y2, label="Modified Gram Schmidt")
     plt.plot(x, y3, label="Householder")

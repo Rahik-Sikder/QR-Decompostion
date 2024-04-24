@@ -37,12 +37,14 @@ def householder(input_A: Matrix):
     B: Matrix = get_identity(A.num_rows)
 
     # Run through each column of A
-    for i in range(0, A.num_cols):
+    for i in range(0, A.num_cols - 1):
 
         # Find a matrix w to reflect our col_vector across 
         # Don't need the column and rows that have alr been computed
         w = Vector(A.matrix[i].vector[i:]) 
         w.vector[0] -= w.vector_length() 
+        if(w.vector_length() == 0):
+            print("calculating column ", i)
         constant_term = 2 / dot_product(w, w) # No need for explicitly defining a transpose
 
         # Instead of finding Rw and computing (Rw)(A), we'll apply wT and w to A individually
