@@ -5,17 +5,18 @@ from experiments import *
 
 def main():
     # sample_run()
-    # average_error_rand(200, 10)
-    # q8_e_perp()
-    # average_error_rand(200, 10)
-    q8_e_perp()
-    # q8_e_s()
+    average_error_rand(200, 10)
+    # find_n_for_error_threshold(.9999, "gram_schmidt")
+    # find_n_for_error_threshold(.9999, "gram_schmidt_modified")
+    # find_n_for_error_threshold(.9999, "householder")
+    # plot_e_perp()
+    # plot_e_s()
+    pass
     
 
 
 def sample_run():
     A = Matrix([Vector([1, 1, 1, 1]), Vector([0, 1, 1, 1]), Vector([0, 0, 1, 1])])
-    B = Matrix([Vector([1, 1, 1]), Vector([0, 1, 1]), Vector([0, 0, 1])])
 
     Q, R, error_perp, error_s = gram_schmidt(A)
     print("This is Q from naive Gram-Schmidt\n")
@@ -46,9 +47,10 @@ def sample_run():
     print("Error s: ", error_s)
     print("\n")
 
-    print('Matrix Multiplication')
-    C = matrix_multiply(A,B)
-    C.print_matrix()
+    # print('Matrix Multiplication')
+    # B = Matrix([Vector([1, 1, 1]), Vector([0, 1, 1]), Vector([0, 0, 1])])
+    # C = matrix_multiply(A,B)
+    # C.print_matrix()
 
 if __name__ == '__main__':
     main()

@@ -38,9 +38,9 @@ def gram_schmidt(A: Matrix):
 
     I = get_identity(Q.num_cols)
     error_perp = get_abs_max(matrix_multiply(QT, Q) - I)
-    error_a = get_abs_max(A - QR)
+    error_s = get_abs_max(A - QR)
 
-    return (Q, R, error_perp, error_a)
+    return (Q, R, error_perp, error_s)
 
 
 def gram_schmidt_modified(A):
@@ -71,6 +71,6 @@ def gram_schmidt_modified(A):
 
     I = get_identity(Q.num_cols)
     error_perp = get_abs_max(matrix_multiply(QT, Q) - I)
-    error_a = get_abs_max(A - QR)
+    error_s = get_abs_max(A - QR)
 
-    return (Q, R, error_perp, error_a)
+    return (Q, R, error_perp, error_s)

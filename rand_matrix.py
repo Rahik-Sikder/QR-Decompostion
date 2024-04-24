@@ -35,7 +35,7 @@ def regularized_hilbert_matrix(n):
     
     # Add epsilon to the diagonal elements
     for i in range(n):
-        I.matrix[i].vector[i] += 0.0001
+        I.matrix[i].vector[i] *= 0.0001
     
     # Compute H_eps = H + eps * I
     list = []
