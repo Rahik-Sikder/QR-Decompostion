@@ -57,6 +57,7 @@ class Vector:
             res.vector[i] = res.get(i) + other.get(i)
         return res
 
+
 class Matrix:
 
     def __init__(self, vector_list: List[Vector]):
@@ -80,7 +81,7 @@ class Matrix:
         for row in range(self.num_rows):
             print("|", end='')
             for col in range(self.num_cols): 
-                print("" if col == 0 else "\t\t", '%.5f'%(self.matrix[col].get(row)), end='')
+                print("" if col == 0 else "\t\t", (self.matrix[col].get(row)), end='')
             print(" |", end='\n\n')
         print()
     
@@ -94,6 +95,7 @@ class Matrix:
         for i in range(self.num_rows):
             new_vector_list.append(self.get_row(i))
         self.matrix = new_vector_list
+        self.num_cols, self.num_rows = self.num_rows, self.num_cols
         return self
     
     def __sub__(self, other):
@@ -109,7 +111,7 @@ class Matrix:
         for i in range(self.num_cols):
             vector_list.append(self.matrix[i] + other.matrix[i])
         return Matrix(vector_list)
-        
+    
 
 # Matrix operations that return a new object
 
@@ -133,3 +135,28 @@ def get_identity(n):
         list[i] = 1
         vectors.append(Vector(list))
     return Matrix(vectors)
+
+def get_abs_max(matrix: Matrix):
+    x = 0
+    for col in range(matrix.num_cols):
+        for row in range(matrix.num_rows):
+            x = max(matrix.matrix[col].get(row), x)
+    return x
+     
+
+def matrix_multiply(A: Matrix, B: Matrix):
+    
+    # Want to first check if dimensions are correct
+    if A.num_cols != B.num_rows:
+        raise ValueError("Matrix dimensions are not compatible for multiplication.")
+
+    vector_list = []
+
+    for col in range(B.num_cols):
+        temp_nums = []
+        for row in range(A.num_rows):
+            temp_nums.append(dot_product(A.get_row(row), B.matrix[col]))
+        vector_list.append(Vector(temp_nums))
+
+    return Matrix(vector_list)
+

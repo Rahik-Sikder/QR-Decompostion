@@ -1,22 +1,23 @@
 from matrix import *
+import math
 
 
-def gram_schmidt(basis_matrix: Matrix):
+def gram_schmidt(A: Matrix):
 
     # Create list of orthonormal colums
     ON_cols = []
 
-    for i in range(0, basis_matrix.num_cols):
+    for i in range(0, A.num_cols):
 
         # Get column vector of the arbitrary basis matrix
-        ortho_col = basis_matrix.get(i)
+        ortho_col = A.get(i)
 
         # Find terms to subtract
         terms = []
         for q_vector in ON_cols:
             terms.append(
                 scalar_multiply(
-                    dot_product(q_vector, basis_matrix.get(i)), q_vector
+                    dot_product(q_vector, A.get(i)), q_vector
                 )
             )
         # Subtract terms from basis matrix column
@@ -30,23 +31,32 @@ def gram_schmidt(basis_matrix: Matrix):
         # append to the list
         ON_cols.append(ortho_col)
 
-    return Matrix(ON_cols)
+    Q = Matrix(ON_cols)
+    QT = Matrix(ON_cols).tranpose()
+    R = matrix_multiply(QT, A)
+    QR = matrix_multiply(Q, R)
+
+    I = get_identity(Q.num_cols)
+    error_perp = get_abs_max(matrix_multiply(QT, Q) - I)
+    error_a = get_abs_max(A - QR)
+
+    return (Q, R, error_perp, error_a)
 
 
-def gram_schmidt_modified(basis_matrix):
+def gram_schmidt_modified(A):
 
     # Create list of orthonormal colums
     ON_cols = []
 
-    for i in range(0, basis_matrix.num_cols):
+    for i in range(0, A.num_cols):
 
         # Get column vector of the arbitrary basis matrix
-        ortho_col = basis_matrix.get(i)
+        ortho_col = A.get(i)
 
         # Subtract project of col onto all q from ON from col
         for q in ON_cols:
             q_vector = Vector(q.vector)
-            ortho_col.subtract(q_vector.scalar_multiply(q_vector.dot_product(basis_matrix.get(i))))
+            ortho_col.subtract(q_vector.scalar_multiply(q_vector.dot_product(A.get(i))))
 
         # Normalize orthogonal column
         ortho_col.normalize_vector()
@@ -54,4 +64,13 @@ def gram_schmidt_modified(basis_matrix):
         # append to the list
         ON_cols.append(ortho_col)
 
-    return Matrix(ON_cols)
+    Q = Matrix(ON_cols)
+    QT = Matrix(ON_cols).tranpose()
+    R = matrix_multiply(QT, A)
+    QR = matrix_multiply(Q, R)
+
+    I = get_identity(Q.num_cols)
+    error_perp = get_abs_max(matrix_multiply(QT, Q) - I)
+    error_a = get_abs_max(A - QR)
+
+    return (Q, R, error_perp, error_a)
