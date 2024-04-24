@@ -43,6 +43,9 @@ def householder(input_A: Matrix):
         # Don't need the column and rows that have alr been computed
         w = Vector(A.matrix[i].vector[i:]) 
         w.vector[0] -= w.vector_length() 
+        if(w.vector_length() == 0):
+            # Can't compute any more iterations
+            continue
         constant_term = 2 / dot_product(w, w) # No need for explicitly defining a transpose
 
         # Instead of finding Rw and computing (Rw)(A), we'll apply wT and w to A individually
@@ -82,14 +85,15 @@ def householder(input_A: Matrix):
 
     # Q = BT 
     # Also here Q is just given the reference to B after B modifies itself with transpose()
-    Q = Matrix(B.tranpose().matrix[:A.num_cols]) # truncation
-    QT = Matrix(Q.matrix).tranpose()
-    R = matrix_multiply(QT, A)
+    QT = Matrix([B.matrix[i] for i in range(A.num_rows)])
+    B.tranpose()
+    Q = Matrix([B.matrix[i] for i in range(A.num_cols)]) # truncation
+    R = matrix_multiply(QT, input_A)
     QR = matrix_multiply(Q, R)
 
     I = get_identity(Q.num_cols)
     error_perp = get_abs_max(matrix_multiply(QT, Q) - I)
-    error_a = get_abs_max(A - QR)
+    error_a = get_abs_max(input_A - QR)
 
     return (Q, R, error_perp, error_a)
 

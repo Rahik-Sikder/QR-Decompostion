@@ -5,9 +5,9 @@
 from gram_schmidt import gram_schmidt, gram_schmidt_modified
 from householder import householder
 from rand_matrix import *
-from matrix import Matrix, Vector
-
+from matrix import *
 import matplotlib.pyplot as plt
+import math
 
 
 # Run the three programs on some 200 × 200 matrices whose entries are randomly selected between −1
@@ -18,13 +18,17 @@ def average_error_rand(n, num_times):
     householder_qr_sum = 0
 
     # random matrix
-    for i in range(num_times):  
+    for i in range(1, num_times + 1):  
         rand_matrix = random_matrix(200) # random matrix with entries from -1 to 1
         gs_sum += gram_schmidt(rand_matrix)[2]
         modified_gs_sum += gram_schmidt_modified(rand_matrix)[2]
         householder_qr_sum += householder(rand_matrix)[2]
-        print("*", end="")
-    
+        print()
+        print("Average for Gram Schmidt from Part 1: ", gs_sum/i)
+        print("Average for Modified Gram Schmidt from Part 2: ", modified_gs_sum/i)
+        print("Average for Householder QR from Part 3: ", householder_qr_sum/i)
+        print()
+    print()
     print("Average for Gram Schmidt from Part 1: ", gs_sum/num_times)
     print("Average for Modified Gram Schmidt from Part 2: ", modified_gs_sum/num_times)
     print("Average for Householder QR from Part 3: ", householder_qr_sum/num_times)
@@ -57,8 +61,8 @@ def average_error_regularized_hilbert(n, num_times):
     for i in range(num_times):  
         reg_hilbert_matrix = regularized_hilbert_matrix(200) # regularized hilbert matrix
         gs_sum += gram_schmidt(H)[2]
-        modified_gs_sum += gram_schmidt_modified(H)[2]
-        householder_qr_sum = householder(H)[2]
+        modified_gs_sum += gram_schmidt_modified(reg_hilbert_matrix)[2]
+        householder_qr_sum = householder(reg_hilbert_matrix)[2]
     
     print("Average for Gram Schmidt from Part 1: ", gs_sum/num_times)
     print("Average for Modified Gram Schmidt from Part 2: ", modified_gs_sum/num_times)
@@ -67,7 +71,8 @@ def average_error_regularized_hilbert(n, num_times):
 
 def find_n_for_error_threshold(error_threshold, method):
     n = 2
-    while True:
+    error = 0
+    while error <= error_threshold:
         H = hilbert_matrix(n)
         if method == "gram_schmidt":
             Q, R, error_perp, error_s = gram_schmidt(H)
@@ -78,15 +83,13 @@ def find_n_for_error_threshold(error_threshold, method):
         else:
             raise ValueError("Invalid method name")
 
-        I = Matrix([Vector([1 if i == j else 0 for j in range(n)]) for i in range(n)])
-        error = max(abs(Q.tranpose() * Q - I))
-        if error > error_threshold:
-            break
+        error = error_perp
         n += 1
     print("The smallest n for us to get the desired value based on our threshhold is ", n)
+    return n
 
 
-def q8_e_perp():
+def plot_e_perp():
     x = [i for i in range(2 , 101)]
     y1 = [] # gram_schmidt
     y2 = [] # mod_gram_schmidt
@@ -97,22 +100,25 @@ def q8_e_perp():
         y2.append(gram_schmidt_modified(RH)[2])
         y3.append(householder(RH)[2])
     
-    plt.plot(x, y1, label="Gram Schmidt")
-    plt.plot(x, y2, label="Modified Gram Schmidt")
-    plt.plot(x, y3, label="Householder")
+    plt.plot(x, y1, label="Gram Schmidt E_PERP")
+    plt.plot(x, y2, label="Modified Gram Schmidt E_PERP")
+    plt.plot(x, y3, label="Householder E_PERP")
+
+
     # naming the x axis
-    plt.xlabel('n')
+    plt.xlabel('Size of matrix n')
     # naming the y axis
-    plt.ylabel('E PERP')
+    plt.ylabel('Error size for both E_PERP')
+    plt.yscale("log")
     # giving a title to my graph
-    plt.title('E PERP')
+    plt.title('Error term (E_PERP) of Gram-Schmidt and Householder Reflection upon a Regularized Hilbert matrix')
  
     # show a legend on the plot
     plt.legend()
 
     plt.show()
 
-def q8_e_s():
+def plot_e_s():
     x = [i for i in range(2 , 101)]
     y1 = [] # gram_schmidt
     y2 = [] # mod_gram_schmidt
@@ -122,23 +128,25 @@ def q8_e_s():
         y1.append(gram_schmidt(RH)[3])
         y2.append(gram_schmidt_modified(RH)[3])
         y3.append(householder(RH)[3])
-    plt.plot(x, y1, label="Gram Schmidt")
-    plt.plot(x, y2, label="Modified Gram Schmidt")
-    plt.plot(x, y3, label="Householder")
+    plt.plot(x, y1, label="Gram Schmidt E_S")
+    plt.plot(x, y2, label="Modified Gram Schmidt E_S")
+    plt.plot(x, y3, label="Householder E_S")
 
     # naming the x axis
-    plt.xlabel('n')
+    plt.xlabel('Size of matrix n')
     # naming the y axis
-    plt.ylabel('E S')
+    plt.ylabel('Error size for E_S')
+    plt.yscale("log")
     # giving a title to my graph
-    plt.title('E S')
- 
+    plt.title('Error term (E_S) of Gram-Schmidt and Householder Reflection upon a Regularized Hilbert matrix')
+
     # show a legend on the plot
     plt.legend()
+
     plt.show()
 
 
-if __name__ == "__main__":
+def run_smallest_n_test():
     error_threshold = 0.9999
     print(f"Smallest n for Gram-Schmidt such that error > {error_threshold}: {find_n_for_error_threshold(error_threshold, 'gram_schmidt')}")
     print(f"Smallest n for Modified Gram-Schmidt such that error > {error_threshold}: {find_n_for_error_threshold(error_threshold, 'gram_schmidt_modified')}")
