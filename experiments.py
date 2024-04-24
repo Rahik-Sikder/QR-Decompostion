@@ -91,13 +91,22 @@ def q8_e_perp():
     y3 = [] # householder
     for i in range (2, 101):
         RH = regularized_hilbert_matrix(i)
-        y1.append(gram_schmidt(RH)[3])
-        y3.append(gram_schmidt_modified(RH)[3])
-        y2.append(householder(RH)[3])
+        y1.append(gram_schmidt(RH)[2])
+        y2.append(gram_schmidt_modified(RH)[2])
+        y3.append(householder(RH)[2])
     
     plt.plot(x, y1, label="Gram Schmidt")
     plt.plot(x, y2, label="Modified Gram Schmidt")
     plt.plot(x, y3, label="Householder")
+    # naming the x axis
+    plt.xlabel('n')
+    # naming the y axis
+    plt.ylabel('E PERP')
+    # giving a title to my graph
+    plt.title('E PERP')
+ 
+    # show a legend on the plot
+    plt.legend()
 
     plt.show()
 
@@ -109,11 +118,21 @@ def q8_e_s():
     for i in range (2, 101):
         RH = regularized_hilbert_matrix(i)
         y1.append(gram_schmidt(RH)[3])
-        y3.append(gram_schmidt_modified(RH)[3])
-        y2.append(householder(RH)[3])
+        y2.append(gram_schmidt_modified(RH)[3])
+        y3.append(householder(RH)[3])
     plt.plot(x, y1, label="Gram Schmidt")
     plt.plot(x, y2, label="Modified Gram Schmidt")
     plt.plot(x, y3, label="Householder")
+
+    # naming the x axis
+    plt.xlabel('n')
+    # naming the y axis
+    plt.ylabel('E S')
+    # giving a title to my graph
+    plt.title('E S')
+ 
+    # show a legend on the plot
+    plt.legend()
     plt.show()
 
 

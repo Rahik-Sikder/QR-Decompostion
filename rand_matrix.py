@@ -13,9 +13,9 @@ def random_matrix(n):
 
 def hilbert_matrix(n):
     vectors = []
-    for i in range(n):
+    for i in range(1, n+1):
         nums = []
-        for j in range(n):
+        for j in range(1, n+1):
             nums.append(1 / (i + j - 1))
         vectors.append(Vector(nums))
     return Matrix(vectors)
@@ -38,9 +38,9 @@ def regularized_hilbert_matrix(n):
         I.matrix[i].vector[i] += 0.0001
     
     # Compute H_eps = H + eps * I
-    H_eps = Matrix([])
+    list = []
     for i in range(n):
-        H_eps.matrix.append(H.get(i) + I.get(i))
+        list.append(H.get(i) + I.get(i))
     
-    return H_eps
+    return Matrix(list)
 

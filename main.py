@@ -7,6 +7,11 @@ def main():
     # sample_run()
     average_error_rand(200, 10)
     # q8_e_perp()
+    # average_error_rand(200, 10)
+    q8_e_perp()
+    q8_e_s()
+    
+
 
 def sample_run():
     A = Matrix([Vector([1, 1, 1, 1]), Vector([0, 1, 1, 1]), Vector([0, 0, 1, 1])])
