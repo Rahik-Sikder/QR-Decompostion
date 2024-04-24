@@ -85,6 +85,7 @@ def find_n_for_error_threshold(error_threshold, method):
 
         error = error_perp
         n += 1
+        print(error)
     print("The smallest n for us to get the desired value based on our threshhold is ", n)
     return n
 

@@ -56,7 +56,7 @@ def gram_schmidt_modified(A):
         # Subtract project of col onto all q from ON from col
         for q in ON_cols:
             q_vector = Vector(q.vector)
-            ortho_col.subtract(q_vector.scalar_multiply(q_vector.dot_product(A.get(i))))
+            ortho_col.subtract(q_vector.scalar_multiply(q_vector.dot_product(ortho_col)))
 
         # Normalize orthogonal column
         ortho_col.normalize_vector()
