@@ -47,10 +47,10 @@ def sample_run():
     print("Error s: ", error_s)
     print("\n")
 
-    # print('Matrix Multiplication')
-    # B = Matrix([Vector([1, 1, 1]), Vector([0, 1, 1]), Vector([0, 0, 1])])
-    # C = matrix_multiply(A,B)
-    # C.print_matrix()
+    print('Matrix Multiplication')
+    B = Matrix([Vector([1, 1, 1]), Vector([0, 1, 1]), Vector([0, 0, 1])])
+    C = matrix_multiply(A,B)
+    C.print_matrix()
 
 if __name__ == '__main__':
     main()

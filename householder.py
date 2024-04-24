@@ -85,9 +85,9 @@ def householder(input_A: Matrix):
 
     # Q = BT 
     # Also here Q is just given the reference to B after B modifies itself with transpose()
-    QT = Matrix([B.matrix[i] for i in range(A.num_rows)])
     B.tranpose()
     Q = Matrix([B.matrix[i] for i in range(A.num_cols)]) # truncation
+    QT = Matrix([Q.matrix[i] for i in range(A.num_cols)]).tranpose()
     R = matrix_multiply(QT, input_A)
     QR = matrix_multiply(Q, R)
 
