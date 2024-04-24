@@ -9,11 +9,7 @@ def random_matrix(n):
         vector_list.append(Vector(nums))
 
     # Create the matrix from the list of vectors
-    random_matrix = Matrix(vector_list)
-
-    # Print the matrix
-    return random_matrix
-
+    return Matrix(vector_list)
 
 def hilbert_matrix(n):
     vectors = []
@@ -24,19 +20,22 @@ def hilbert_matrix(n):
         vectors.append(Vector(nums))
     return Matrix(vectors)
 
-    # # Example usage
-    # n = 5
-    # H = hilbert_matrix(n)
-    # print("Hilbert Matrix of size {}x{}:".format(n, n))
-    # H.print_matrix()
+def get_identity(n):
+    vectors = []
+    for i in range(n):
+        list = [0] * n
+        list[i] = 1
+        vectors.append(Vector(list))
+    return Matrix(vectors)
 
-def regularized_hilbert_matrix(n, eps):
+
+def regularized_hilbert_matrix(n):
     H = hilbert_matrix(n)
     I = get_identity(n)
     
     # Add epsilon to the diagonal elements
     for i in range(n):
-        I.matrix[i].vector[i] += eps
+        I.matrix[i].vector[i] += 0.0001
     
     # Compute H_eps = H + eps * I
     H_eps = Matrix([])

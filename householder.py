@@ -29,7 +29,9 @@ def householder(input_A: Matrix):
     that I will become QT, which can be turned into Q.
 
     '''
-    A = Matrix(input_A.matrix)
+
+    A = Matrix([Vector(input_A.matrix[col].vector) for col in range(input_A.num_cols)])
+    
 
     # Initialize an Identity matrix B to become QT
     B: Matrix = get_identity(A.num_rows)
@@ -80,6 +82,16 @@ def householder(input_A: Matrix):
 
     # Q = BT 
     # Also here Q is just given the reference to B after B modifies itself with transpose()
-    Q = B.tranpose()
+    Q = Matrix(B.tranpose().matrix[:A.num_cols]) # truncation
+    QT = Matrix(Q.matrix).tranpose()
+    R = matrix_multiply(QT, A)
+    QR = matrix_multiply(Q, R)
 
-    return Q, A
+    I = get_identity(Q.num_cols)
+    error_perp = get_abs_max(matrix_multiply(QT, Q) - I)
+    error_a = get_abs_max(A - QR)
+
+    return (Q, R, error_perp, error_a)
+
+
+    
