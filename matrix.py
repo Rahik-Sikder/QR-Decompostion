@@ -1,41 +1,11 @@
 import math
-class Matrix:
-
-    def __init__(self, vector_list):
-        '''
-        Vector list should contain a list of Vector objects
-        '''
-        self.matrix = []
-        self.num_rows = vector_list[0].length
-        self.num_cols = len(vector_list)
-        for vector in vector_list:
-            self.matrix.append(vector)
-
-    def get(self, i):
-        # Return a new Vector object
-        return Vector(self.matrix[i].vector)
-    
-    def print_matrix(self):
-        for row in range(self.num_rows):
-            print("|", end='')
-            for col in range(self.num_cols): 
-                print("\t", self.matrix[col].get(row), end='')
-            print("|", end='\n')
-    
-    def scalar_multiply(self, scalar):
-        for vector in self.matrix:
-            vector.scalar_multiply(scalar)
-        return self
-
-            
-
+from typing import List # Types are cool, don't ask why I'm using python
 
 class Vector:
 
-    def __init__(self, nums, isTranspose=False):
+    def __init__(self, nums):
         self.vector = []
         self.length = len(nums)
-        self.isTranspose = isTranspose
         for x in nums:
             self.vector.append(x)
     
@@ -64,15 +34,15 @@ class Vector:
         return math.sqrt(self.dot_product(self))
 
     def subtract(self, other_vec):
-        # Subtraction modifies object
         for i in range(self.length):
             self.vector[i] = self.get(i) - other_vec.get(i)
+        return self
         
     def scalar_multiply(self, scalar):
         for i in range(self.length):
             self.vector[i] *= scalar
         return self
-    
+
     def __sub__(self, other):
         # Subtraction creates new object
         res = Vector(self.vector)
@@ -86,6 +56,59 @@ class Vector:
         for i in range(res.length):
             res.vector[i] = res.get(i) + other.get(i)
         return res
+
+class Matrix:
+
+    def __init__(self, vector_list: List[Vector]):
+        '''
+        Vector list should contain a list of Vector objects
+        '''
+        self.matrix: List[Vector] = []
+        self.num_rows = vector_list[0].length
+        self.num_cols = len(vector_list)
+        for vector in vector_list:
+            self.matrix.append(vector)
+
+    def get(self, i):
+        # Return a new Vector object
+        return Vector(self.matrix[i].vector)
+    
+    def get_row(self, i):
+        return Vector([ self.matrix[col].vector[i] for col in range(self.num_cols) ])
+    
+    def print_matrix(self):
+        for row in range(self.num_rows):
+            print("|", end='')
+            for col in range(self.num_cols): 
+                print("" if col == 0 else "\t\t", '%.5f'%(self.matrix[col].get(row)), end='')
+            print(" |", end='\n\n')
+        print()
+    
+    def scalar_multiply(self, scalar):
+        for vector in self.matrix:
+            vector.scalar_multiply(scalar)
+        return self
+
+    def tranpose(self):
+        new_vector_list = []
+        for i in range(self.num_rows):
+            new_vector_list.append(self.get_row(i))
+        self.matrix = new_vector_list
+        return self
+    
+    def __sub__(self, other):
+        # Subtraction creates new object
+        vector_list = []
+        for i in range(self.num_cols):
+            vector_list.append(self.matrix[i] - other.matrix[i])
+        return Matrix(vector_list)
+    
+    def __add__(self, other):
+        # Addition creates new object
+        vector_list = []
+        for i in range(self.num_cols):
+            vector_list.append(self.matrix[i] + other.matrix[i])
+        return Matrix(vector_list)
         
 
 # Matrix operations that return a new object
@@ -110,19 +133,3 @@ def get_identity(n):
         list[i] = 1
         vectors.append(Vector(list))
     return Matrix(vectors)
-  
-def vector_multiply(vector_a, vector_b):
-    if (vector_a.isTranspose and not vector_b.isTranspose) or (not vector_a.isTranspose and vector_b.isTranspose):
-        raise Exception("Matrix Multiply Error")
-
-    if(vector_a.isTranspose): return dot_product(vector_a, vector_b)
-    
-    vector_list = []
-    #vvT
-    for val_b in vector_b.vector:
-        nums = []
-        for val_a in vector_a.vector:
-            nums.append(val_a * val_b)
-        vector_list.append(Vector(nums))
-    
-    return Matrix(vector_list)
